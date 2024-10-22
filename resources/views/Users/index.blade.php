@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1>List Users</h1>
-        
+        <a href="{{ route('users.create') }}" class="btn btn-success">Add User</a>
         <a href="{{ route('welcome') }}" class="btn btn-warning">Menú</a>
         <table class="table">
             <thead>
@@ -27,6 +27,7 @@
                     <tr>
                         <td>{{ $user->id }}</td> <!-- ID del usuario -->
                         <td>{{ $user->name }}</td> <!-- Nombre del usuario -->
+                        <td>{{ $user->email }}</td>
                         <td>{{ $user->password }}</td> <!-- Contraseña del usuario -->
                         <td>{{ $user->role }}</td> <!-- Rol del usuario -->
                         <td>

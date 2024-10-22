@@ -16,10 +16,11 @@ class ClientController extends Controller
        
         $clients = DB::table('clients')
         ->join('users', 'clients.user_id', '=', 'users.id')
-        ->select('clients.*', 'users.name as user_name')
+        ->select('clients.*', 'users.name as user_name', 'users.email')
         ->get();    
 
-        return view('clients.index', ['clients' => $clients]);
+        return view('clients.index', ['clients' => $clients]);      
+       
     }
 
     /**
@@ -39,7 +40,19 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'user_id' => 'required|exists:users,id', // Validación del usuario
+            'address' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        $client = new Client(); // Asumiendo que tienes el modelo Client
+        $client->user_id = $request->input('user_id');
+        $client->address = $request->input('address');
+        $client->phone = $request->input('phone');
+        $client->save();
+
+        return redirect()->route('clients.index')->with('success', 'Cliente creado exitosamente.');
     }
 
     /**

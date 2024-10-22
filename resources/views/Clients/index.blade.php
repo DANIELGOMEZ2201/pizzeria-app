@@ -15,9 +15,10 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
                     <th>Dirección</th>
                     <th>Teléfono</th>
-                    <th>Usuario</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -25,9 +26,10 @@
                 @foreach ($clients as $client)
                     <tr>
                         <td>{{ $client->id }}</td>
+                        <td>{{ $client->user_name ?? 'Sin usuario' }}</td>
+                        <td>{{ $client->email ?? 'Sin email' }}</td>
                         <td>{{ $client->address }}</td>
                         <td>{{ $client->phone }}</td>
-                        <td>{{ $client->user->name ?? 'Sin usuario' }}</td> <!-- Asumiendo que el modelo Client tiene una relación con User -->
                         <td>
                             <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-warning btn-sm">Edit</a>
                             <form action="{{ route('clients.destroy', $client->id) }}" method="POST" style="display:inline-block;">
