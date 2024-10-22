@@ -10,6 +10,7 @@
     <div class="container">
         <h1>List Clients</h1>
         <a href="{{ route('clients.create') }}" class="btn btn-success">Add Clients</a>
+        <a href="{{ route('welcome') }}" class="btn btn-warning">Menú</a>
         <table class="table">
             <thead>
                 <tr>
@@ -28,7 +29,7 @@
                         <td>{{ $client->phone }}</td>
                         <td>{{ $client->user->name ?? 'Sin usuario' }}</td> <!-- Asumiendo que el modelo Client tiene una relación con User -->
                         <td>
-                            
+                            <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-warning btn-sm">Edit</a>
                         </td>
                     </tr>
                 @endforeach

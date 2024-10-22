@@ -55,15 +55,32 @@ class ClientController extends Controller
      */
     public function edit(string $id)
     {
-        //
-    }
+        $client = Client::find($id); // Obtener el cliente por ID
+        $users = DB::table('users')->orderBy('name')->get(); // Obtener usuarios
 
-    /**
-     * Update the specified resource in storage.
-     */
+        return view('clients.edit', ['client' => $client, 'users' => $users]);
+    }   
+
+/**
+ * Update the specified resource in storage.
+ */
     public function update(Request $request, string $id)
     {
-        //
+        $client = Client::find($id);
+        
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'address' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        $client->user_id = $request->input('user_id');
+        $client->address = $request->input('address');
+        $client->phone = $request->input('phone');
+
+        $client->save();
+
+        return redirect()->route('clients.index')->with('success', 'Cliente actualizado exitosamente.');
     }
 
     /**
