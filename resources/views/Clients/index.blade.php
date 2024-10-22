@@ -30,6 +30,11 @@
                         <td>{{ $client->user->name ?? 'Sin usuario' }}</td> <!-- Asumiendo que el modelo Client tiene una relación con User -->
                         <td>
                             <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{{ route('clients.destroy', $client->id) }}" method="POST" style="display:inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach

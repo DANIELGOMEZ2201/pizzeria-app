@@ -86,8 +86,16 @@ class ClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $client = Client::find($id); // Obtener el cliente por ID
+
+        if ($client) 
+        {
+            $client->delete(); // Eliminar el cliente
+            return redirect()->route('clients.index')->with('success', 'Cliente eliminado con éxito.');
+        }
+
+    return redirect()->route('clients.index')->with('error', 'Cliente no encontrado.'); // Mensaje de error si el cliente no existe
     }
 }
