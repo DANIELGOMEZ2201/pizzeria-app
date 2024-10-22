@@ -27,7 +27,11 @@ class ClientController extends Controller
      */
     public function create()
     {
-        //
+        $users = DB::table('users')
+        ->orderBy('name')
+        ->get();
+
+        return view('clients.new', ['users' => $users]);
     }
 
     /**

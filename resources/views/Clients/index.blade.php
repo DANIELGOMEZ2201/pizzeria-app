@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>List de Clients</title>
+    <title>List Clients</title>
 </head>
 <body>
     <div class="container">
         <h1>List Clients</h1>
-
+        <a href="{{ route('clients.create') }}" class="btn btn-success">Add Clients</a>
         <table class="table">
             <thead>
                 <tr>
