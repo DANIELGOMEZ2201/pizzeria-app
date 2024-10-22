@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -13,3 +14,6 @@ Route::get('/clients/create', [ClientController::class, 'create'])->name('client
 Route::delete('/clients/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');
 Route::put('/clients/{client}', [EventoController::class, 'update'])->name('clients.update');
 Route::get('/clients/{client}/edit', [EventoController::class, 'edit'])->name('clients.edit');
+
+//Users
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
