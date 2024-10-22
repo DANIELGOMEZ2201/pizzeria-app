@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\EmployeController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -22,3 +23,6 @@ Route::get('/users/create', [UserController::class, 'create'])->name('users.crea
 Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+
+//Employees
+Route::get('/employees', [EmployeController::class, 'index'])->name('employees.index');
