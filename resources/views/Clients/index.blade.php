@@ -19,6 +19,7 @@
                     <th>Correo</th>
                     <th>Dirección</th>
                     <th>Teléfono</th>
+                    <th>Usuario.ID</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -30,6 +31,7 @@
                         <td>{{ $client->email ?? 'Sin email' }}</td>
                         <td>{{ $client->address }}</td>
                         <td>{{ $client->phone }}</td>
+                        <td>{{ $client->user_id }}</td>
                         <td>
                             <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-warning btn-sm">Edit</a>
                             <form action="{{ route('clients.destroy', $client->id) }}" method="POST" style="display:inline-block;">
