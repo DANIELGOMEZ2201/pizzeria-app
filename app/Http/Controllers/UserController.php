@@ -42,7 +42,7 @@ class UserController extends Controller
         $user = new User();
         $user->name = $request->input('name');
         $user->email = $request->input('email');
-        $user->password = bcrypt($request->input('password')); // Asegúrate de encriptar la contraseña
+        $user->password = bcrypt($request->input('password')); 
         $user->role = $request->input('role');
         $user->save();
 
@@ -62,7 +62,13 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::find($id);
+
+        if (!$user) {
+            return redirect()->route('users.index')->with('error', 'usuario no encontrado.');
+        }
+
+        return view('users.edit', ['user' => $user]);
     }
 
     /**
@@ -70,7 +76,27 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::find($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'password' => 'nullable|string|min:8', 
+            'role' => 'required|in:cliente,empleado',
+        ]);
+    
+        $user->name = $request->name;
+        $user->email = $request->email;
+    
+       
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->password);
+        }
+    
+        $user->role = $request->role;
+        $user->save();
+    
+        return redirect()->route('users.index')->with('success', 'Usuario actualizado con éxito.');
     }
 
     /**
@@ -78,6 +104,10 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::findOrFail($id);    
+        
+        $user->delete();
+        
+        return redirect()->route('users.index')->with('success', 'Usuario eliminado con éxito.');
     }
 }

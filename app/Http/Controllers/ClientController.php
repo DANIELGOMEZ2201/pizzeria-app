@@ -101,14 +101,14 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        $client = Client::find($id); // Obtener el cliente por ID
+        $client = Client::find($id);
 
         if ($client) 
         {
-            $client->delete(); // Eliminar el cliente
+            $client->delete(); 
             return redirect()->route('clients.index')->with('success', 'Cliente eliminado con éxito.');
         }
 
-    return redirect()->route('clients.index')->with('error', 'Cliente no encontrado.'); // Mensaje de error si el cliente no existe
+    return redirect()->route('clients.index')->with('error', 'Cliente no encontrado.'); 
     }
 }
