@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\client;
+use App\Models\Client;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ClientController extends Controller
 {
@@ -13,14 +13,10 @@ class ClientController extends Controller
      */
     public function index()
     {
-       
-        $clients = DB::table('clients')
-        ->join('users', 'clients.user_id', '=', 'users.id')
-        ->select('clients.*', 'users.name as user_name', 'users.email' , 'users.id')
-        ->get();    
+        // Obtener todos los clientes con sus usuarios asociados
+        $clients = Client::with('user')->get();
 
-        return view('clients.index', ['clients' => $clients]);      
-       
+        return view('clients.index', ['clients' => $clients]);
     }
 
     /**
@@ -28,9 +24,8 @@ class ClientController extends Controller
      */
     public function create()
     {
-        $users = DB::table('users')
-        ->orderBy('name')
-        ->get();
+        // Obtener todos los usuarios, ordenados por nombre
+        $users = User::orderBy('name')->get();
 
         return view('clients.new', ['users' => $users]);
     }
@@ -40,17 +35,19 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
+        // Validación de los datos recibidos
         $request->validate([
-            'user_id' => 'required|exists:users,id', // Validación del usuario
+            'user_id' => 'required|exists:users,id',
             'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:20',
         ]);
 
-        $client = new Client(); // Asumiendo que tienes el modelo Client
-        $client->user_id = $request->input('user_id');
-        $client->address = $request->input('address');
-        $client->phone = $request->input('phone');
-        $client->save();
+        // Crear un nuevo cliente usando Eloquent
+        Client::create([
+            'user_id' => $request->input('user_id'),
+            'address' => $request->input('address'),
+            'phone' => $request->input('phone'),
+        ]);
 
         return redirect()->route('clients.index')->with('success', 'Cliente creado exitosamente.');
     }
@@ -58,40 +55,47 @@ class ClientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        // Buscar el cliente por ID con el usuario relacionado
+        $client = Client::with('user')->findOrFail($id);
+
+        return view('clients.show', ['client' => $client]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        $client = Client::find($id); // Obtener el cliente por ID
-        $users = DB::table('users')->orderBy('name')->get(); // Obtener usuarios
+        // Obtener el cliente y los usuarios para el formulario de edición
+        $client = Client::findOrFail($id);
+        $users = User::orderBy('name')->get();
 
         return view('clients.edit', ['client' => $client, 'users' => $users]);
-    }   
+    }
 
-/**
- * Update the specified resource in storage.
- */
-    public function update(Request $request, string $id)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, $id)
     {
-        $client = Client::find($id);
-        
+        // Buscar el cliente por ID
+        $client = Client::findOrFail($id);
+
+        // Validación de los datos recibidos
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:20',
         ]);
 
-        $client->user_id = $request->input('user_id');
-        $client->address = $request->input('address');
-        $client->phone = $request->input('phone');
-
-        $client->save();
+        // Actualizar el cliente
+        $client->update([
+            'user_id' => $request->input('user_id'),
+            'address' => $request->input('address'),
+            'phone' => $request->input('phone'),
+        ]);
 
         return redirect()->route('clients.index')->with('success', 'Cliente actualizado exitosamente.');
     }
@@ -101,14 +105,12 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        $client = Client::find($id);
+        // Buscar el cliente por ID
+        $client = Client::findOrFail($id);
 
-        if ($client) 
-        {
-            $client->delete(); 
-            return redirect()->route('clients.index')->with('success', 'Cliente eliminado con éxito.');
-        }
+        // Eliminar el cliente
+        $client->delete();
 
-    return redirect()->route('clients.index')->with('error', 'Cliente no encontrado.'); 
+        return redirect()->route('clients.index')->with('success', 'Cliente eliminado con éxito.');
     }
 }
