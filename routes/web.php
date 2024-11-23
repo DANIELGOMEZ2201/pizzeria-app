@@ -4,6 +4,18 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EmployeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PizzaController;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\SupplierController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('orders', OrderController::class);
+    Route::resource('pizzas', PizzaController::class);
+    Route::resource('inventory', InventoryController::class);
+    Route::resource('suppliers', SupplierController::class);
+});
+
 
 
 Route::get('/', function () {return view('welcome');})->name('welcome');
@@ -26,3 +38,17 @@ Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.e
 
 //Employees
 Route::get('/employees', [EmployeController::class, 'index'])->name('employees.index');
+
+// Rutas para pedidos
+Route::resource('orders', OrderController::class);
+
+// Rutas para pizzas
+Route::resource('pizzas', PizzaController::class);
+
+// Rutas para inventario (materias primas)
+Route::resource('inventory', InventoryController::class);
+
+// Rutas para proveedores
+Route::resource('suppliers', SupplierController::class);
+
+
